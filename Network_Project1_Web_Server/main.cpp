@@ -105,7 +105,7 @@ void GetLocalURI(char* fileURI, const char* directory, const char* recvBuf, size
 {
 	// 요구하는 파일 경로 분석
 	int indexOfEnd, length = strlen(recvBuf), spaceCount = 0;
-	for (indexOfEnd = 0; indexOfEnd < length; indexOfEnd++) // 두 번째 띄어쓰기를 찾는다.
+	for (indexOfEnd = 0; indexOfEnd < length; indexOfEnd++) // Find second spacing in a HTTP request message.
 	{
 		if (recvBuf[indexOfEnd] == ' ')
 		{
@@ -116,7 +116,6 @@ void GetLocalURI(char* fileURI, const char* directory, const char* recvBuf, size
 	}
 	indexOfEnd--;
 	if (indexOfEnd == 4) // 아무것도 입력하지 않으면 index.html을 불러온다.
-		//sprintf_s(fileNamePtr, sizeOfFileBuf, "%s\\index.html", directory);
 		sprintf_s(fileURI, sizeOfFileBuf, "%s%s", directory, "index.html");
 	else
 	{
@@ -267,8 +266,6 @@ void* HandleHttp(void* arg)
 		ZeroMemory(localURI, DEFAULT_SIZE);
 		GetLocalURI(localURI, directory, buf, DEFAULT_SIZE); // 파일 이름 획득
 
-		//printf("==requested fileName = %s...==\n\n", fileName);
-
 		// 파일을 읽고 fbuf에 출력
 		FILE* fp;
 		fopen_s(&fp, localURI, "rb");
@@ -346,8 +343,6 @@ void* HandleHttp(void* arg)
 			perror("Error in send(). Quitting\n");
 			closesocket(clientSock);
 		}
-
-		//printf("Bytes sent: %d\n", iResult);
 
 		free(fbuf);
 		free(msgBuf);
